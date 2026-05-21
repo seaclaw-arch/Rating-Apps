@@ -22,7 +22,8 @@
             --text: #f1f5f9;
             --text-muted: #94a3b8;
             --star: #fbbf24;
-            --youtube-red: #ff0000;
+            --tiktok-pink: #ff0050;
+            --tiktok-blue: #00f2ea;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -322,91 +323,363 @@
         }
         .modal-error.show { display: block; }
 
-        /* YouTube-Style Live Counter */
-        .counter-container {
-            text-align: center; padding: 20px;
-        }
-        .counter-card {
-            background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(255,0,0,0.05));
-            border: 2px solid rgba(255, 0, 0, 0.3);
-            border-radius: 24px; padding: 32px 24px;
-            margin-bottom: 24px; position: relative; overflow: hidden;
-        }
-        .counter-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,0,0,0.1) 0%, transparent 70%);
-            animation: pulseGlow 3s ease-in-out infinite;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
+        /* ========== TIKTOK STYLE LIVE COUNTER ========== */
+        .tiktok-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255,0,80,0.08) 0%, rgba(0,242,234,0.05) 100%);
+            border: 2px solid rgba(255,0,80,0.3);
+            min-height: 500px;
         }
         
-        .counter-label {
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; font-size: 1.1rem; font-weight: 600;
-            color: var(--youtube-red); margin-bottom: 16px;
-            text-transform: uppercase; letter-spacing: 1px;
+        .tiktok-header {
+            text-align: center;
+            padding: 20px 20px 10px;
+            position: relative;
+            z-index: 2;
         }
-        .counter-label svg { width: 24px; height: 24px; fill: var(--youtube-red); }
+        .tiktok-live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--tiktok-pink);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+        .tiktok-live-dot {
+            width: 8px; height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: tiktokPulse 1s infinite;
+        }
+        @keyframes tiktokPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
         
-        .counter-value {
-            font-size: 4rem; font-weight: 900;
-            background: linear-gradient(135deg, #fff, var(--primary-light));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            line-height: 1; margin-bottom: 8px;
-            font-family: 'Roboto Mono', monospace;
-            text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+        /* Main counter with emoji */
+        .tiktok-main-counter {
+            text-align: center;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 2;
         }
-        .counter-sublabel {
-            color: var(--text-muted); font-size: 0.95rem;
+        .tiktok-emoji-display {
+            font-size: 3.5rem;
+            line-height: 1;
+            margin-bottom: 8px;
+            animation: emojiPop 0.3s ease;
+            transition: transform 0.3s;
         }
-        
-        .counter-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px; margin-top: 24px;
+        .tiktok-emoji-display.pop {
+            animation: emojiBurst 0.5s ease;
         }
-        .counter-mini {
-            background: var(--bg-input); border: 1px solid var(--border);
-            border-radius: 16px; padding: 20px; text-align: center;
+        @keyframes emojiBurst {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
         }
-        .counter-mini-value {
-            font-size: 2rem; font-weight: 800; color: var(--star);
-            margin-bottom: 4px; font-family: 'Roboto Mono', monospace;
+        .tiktok-counter-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
         }
-        .counter-mini-label {
-            font-size: 0.75rem; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1px;
+        .tiktok-count-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--tiktok-pink), var(--tiktok-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Rating Meter */
-        .meter-container {
-            margin-top: 24px; padding-top: 24px;
-            border-top: 1px solid var(--border);
+        /* Star Rain Container */
+        .star-rain-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
         }
-        .meter-label {
-            display: flex; justify-content: space-between;
-            margin-bottom: 10px; font-size: 0.9rem;
+        .floating-star {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: starRise linear forwards;
+            pointer-events: none;
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
         }
-        .meter-bar {
-            height: 12px; background: var(--bg-input);
-            border-radius: 6px; overflow: hidden; position: relative;
+        @keyframes starRise {
+            0% {
+                transform: translateY(100%) scale(0.3) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(80%) scale(1) rotate(20deg);
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-20vh) scale(0.5) rotate(360deg);
+                opacity: 0;
+            }
         }
-        .meter-fill {
-            height: 100%; border-radius: 6px;
-            background: linear-gradient(90deg, var(--danger), var(--warning), var(--success));
+
+        /* Emoji Explosion on new vote */
+        .emoji-explosion {
+            position: absolute;
+            font-size: 2rem;
+            animation: explode 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 10;
+        }
+        @keyframes explode {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
+            100% { transform: scale(0.5) translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Rating Distribution Bars (TikTok style) */
+        .tiktok-rating-bars {
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .tiktok-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .tiktok-bar-emoji {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+        .tiktok-bar-track {
+            flex: 1;
+            height: 14px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 7px;
+            overflow: hidden;
+        }
+        .tiktok-bar-fill {
+            height: 100%;
+            border-radius: 7px;
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
-        .meter-fill::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        .tiktok-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
+            animation: barShimmer 2s infinite;
         }
-        @keyframes shimmer {
+        @keyframes barShimmer {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
+        }
+        .tiktok-bar-count {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            width: 30px;
+            text-align: right;
+        }
+
+        /* Recent voters */
+        .recent-voters {
+            padding: 0 20px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .recent-voters-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .voter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 6px 12px;
+            margin: 4px;
+            font-size: 0.85rem;
+            animation: chipPop 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        @keyframes chipPop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .voter-chip .chip-stars {
+            color: var(--star);
+            font-size: 0.75rem;
+        }
+
+        /* Avg quality meter */
+        .tiktok-meter {
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .tiktok-meter-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        .tiktok-meter-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .tiktok-meter-fill {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--tiktok-pink), var(--warning), var(--success));
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        /* Action Buttons */
+        .tiktok-actions {
+            padding: 16px 20px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+        .btn-tiktok {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-tiktok-primary {
+            background: linear-gradient(135deg, var(--tiktok-pink), #ff4081);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255,0,80,0.4);
+        }
+        .btn-tiktok-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(255,0,80,0.5);
+        }
+        .btn-tiktok-outline {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.2);
+            color: var(--text);
+        }
+        .btn-tiktok-outline:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        /* Fullscreen Counter Display - UPDATED */
+        .counter-fullscreen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a0a1a, #1a0a2e, #0a1929);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .counter-fullscreen.active {
+            display: flex;
+        }
+        .fullscreen-stars {
+            font-size: 12rem; /* DIPERBESAR dari 5rem */
+            margin-bottom: 10px; /* DIKECILKAN dari 20px */
+            animation: fsStars 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.5));
+        }
+        @keyframes fsStars {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+        .fullscreen-count {
+            font-size: 4rem; /* DIKECILKAN dari 8rem */
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--tiktok-pink), var(--tiktok-blue), var(--star));
+            background-size: 200% 100%;
+            animation: gradientText 3s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .fullscreen-label {
+            font-size: 1rem; /* DIKECILKAN dari 1.5rem */
+            color: var(--text-muted);
+            margin-top: 8px; /* DIKECILKAN dari 16px */
+            text-transform: uppercase;
+            letter-spacing: 3px; /* DIKECILKAN dari 4px */
+        }
+        .fullscreen-avg {
+            font-size: 1.5rem; /* DIKECILKAN dari 2.5rem */
+            color: var(--star);
+            margin-top: 8px; /* DIKECILKAN dari 12px */
+            font-weight: 700;
+        }
+        .fullscreen-exit {
+            position: absolute;
+            bottom: 40px;
+            padding: 14px 36px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: var(--text);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fullscreen-exit:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.6);
+        }
+        .fullscreen-floating-emoji {
+            position: absolute;
+            font-size: 3rem;
+            animation: fsFloat 4s linear infinite;
+            opacity: 0.6;
+        }
+        @keyframes fsFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
         /* Responsive */
@@ -415,13 +688,17 @@
             .nav-tabs { width: 100%; justify-content: center; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .card { padding: 20px; }
-            .counter-value { font-size: 3rem; }
+            .fullscreen-stars { font-size: 8rem; }
+            .fullscreen-count { font-size: 3rem; }
         }
         @media (max-width: 480px) {
             .star-rating label { font-size: 2.2rem; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .btn { width: 100%; justify-content: center; }
-            .counter-value { font-size: 2.5rem; }
+            .fullscreen-stars { font-size: 6rem; }
+            .fullscreen-count { font-size: 2.5rem; }
+            .fullscreen-label { font-size: 0.85rem; }
+            .fullscreen-avg { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -453,7 +730,7 @@
             <div class="card">
                 <h2 class="card-title">🎤 Beri Penilaian Presentasi</h2>
                 <p style="color: var(--text-muted); margin-bottom: 24px; text-align: center;">
-                    Bagaimana kesan Anda? Beri bintang dan sampaikan masukan Anda.
+                    Bagaimana kesan Anda? Beri penilaian dan sampaikan masukan Anda.
                 </p>
 
                 <div class="form-group">
@@ -520,7 +797,7 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="card">
-                        <h3 class="card-title">📈 Distribusi Rating</h3>
+                        <h3 class="card-title">📊 Distribusi Rating</h3>
                         <div class="chart-container">
                             <canvas id="ratingChart"></canvas>
                         </div>
@@ -540,57 +817,86 @@
                 </div>
             </div>
 
-            <!-- Live Counter Tab (YouTube Style) -->
+            <!-- Live Counter Tab (TikTok Style) -->
             <div id="adminCounter" class="admin-tab" style="display: none;">
-                <div class="counter-container">
-                    <!-- Main Counter Card -->
-                    <div class="counter-card">
-                        <div class="counter-label">
-                            <svg viewBox="0 0 24 24"><path d="M10 15.5v-7c0-.41.47-.65.8-.4l4.67 3.5c.27.2.27.6 0 .8l-4.67 3.5c-.33.25-.8.01-.8-.4z"/></svg>
-                            <span>Total Penilaian Masuk</span>
-                        </div>
-                        <div class="counter-value" id="liveCounter">0</div>
-                        <div class="counter-sublabel">vote real-time</div>
-                    </div>
-
-                    <!-- Mini Counters -->
-                    <div class="counter-grid">
-                        <div class="counter-mini">
-                            <div class="counter-mini-value" id="counterAvg">0.0</div>
-                            <div class="counter-mini-label">Rata-rata</div>
-                        </div>
-                        <div class="counter-mini">
-                            <div class="counter-mini-value" id="counter5star">0</div>
-                            <div class="counter-mini-label">⭐ 5 Bintang</div>
-                        </div>
-                        <div class="counter-mini">
-                            <div class="counter-mini-value" id="counterFeedback">0</div>
-                            <div class="counter-mini-label">💬 Dengan Saran</div>
-                        </div>
-                        <div class="counter-mini">
-                            <div class="counter-mini-value" id="counterRate">0/s</div>
-                            <div class="counter-mini-label">⚡ Kecepatan</div>
+                <div class="tiktok-container" id="tiktokContainer">
+                    <!-- Star Rain -->
+                    <div class="star-rain-container" id="starRain"></div>
+                    
+                    <!-- Header -->
+                    <div class="tiktok-header">
+                        <div class="tiktok-live-badge">
+                            <span class="tiktok-live-dot"></span>
+                            LIVE RATING
                         </div>
                     </div>
 
-                    <!-- Rating Meter -->
-                    <div class="meter-container">
-                        <div class="meter-label">
-                            <span>Kualitas Presentasi</span>
+                    <!-- Main Emoji Counter -->
+                    <div class="tiktok-main-counter">
+                        <div class="tiktok-emoji-display" id="mainEmoji">😊</div>
+                        <div class="tiktok-counter-label">
+                            Total Penilaian: <span class="tiktok-count-value" id="totalCounter">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Rating Distribution Bars -->
+                    <div class="tiktok-rating-bars">
+                        <div class="tiktok-bar-row">
+                            <div class="tiktok-bar-emoji">🤩</div>
+                            <div class="tiktok-bar-track"><div class="tiktok-bar-fill" id="bar5" style="width:0%;background:linear-gradient(90deg,#22c55e,#4ade80)"></div></div>
+                            <div class="tiktok-bar-count" id="count5">0</div>
+                        </div>
+                        <div class="tiktok-bar-row">
+                            <div class="tiktok-bar-emoji">😊</div>
+                            <div class="tiktok-bar-track"><div class="tiktok-bar-fill" id="bar4" style="width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div>
+                            <div class="tiktok-bar-count" id="count4">0</div>
+                        </div>
+                        <div class="tiktok-bar-row">
+                            <div class="tiktok-bar-emoji">🙂</div>
+                            <div class="tiktok-bar-track"><div class="tiktok-bar-fill" id="bar3" style="width:0%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div>
+                            <div class="tiktok-bar-count" id="count3">0</div>
+                        </div>
+                        <div class="tiktok-bar-row">
+                            <div class="tiktok-bar-emoji">😐</div>
+                            <div class="tiktok-bar-track"><div class="tiktok-bar-fill" id="bar2" style="width:0%;background:linear-gradient(90deg,#f97316,#fb923c)"></div></div>
+                            <div class="tiktok-bar-count" id="count2">0</div>
+                        </div>
+                        <div class="tiktok-bar-row">
+                            <div class="tiktok-bar-emoji">😞</div>
+                            <div class="tiktok-bar-track"><div class="tiktok-bar-fill" id="bar1" style="width:0%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div>
+                            <div class="tiktok-bar-count" id="count1">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Voters -->
+                    <div class="recent-voters" id="recentVoters">
+                        <div class="recent-voters-title">👥 Penilai Terbaru</div>
+                        <div id="voterChips">
+                            <span style="color:var(--text-muted);font-size:0.85rem;">Belum ada penilaian</span>
+                        </div>
+                    </div>
+
+                    <!-- Quality Meter -->
+                    <div class="tiktok-meter">
+                        <div class="tiktok-meter-header">
+                            <span>🎯 Kualitas Presentasi</span>
                             <span id="meterValue">0.0/5.0</span>
                         </div>
-                        <div class="meter-bar">
-                            <div class="meter-fill" id="meterFill" style="width: 0%"></div>
+                        <div class="tiktok-meter-bar">
+                            <div class="tiktok-meter-fill" id="meterFill" style="width:0%"></div>
                         </div>
                     </div>
 
-                    <!-- Display Controls -->
-                    <div class="controls" style="margin-top: 32px;">
-                        <button class="btn btn-primary" onclick="toggleCounterDisplay()">
-                            🎬 Toggle Tampilan Counter
+                    <!-- Actions -->
+                    <div class="tiktok-actions">
+                        <button class="btn-tiktok btn-tiktok-primary" onclick="toggleFullscreenCounter()">
+                            🎬 Tampilan Layar Penuh
                         </button>
-                        <button class="btn btn-outline" onclick="resetCounterAnim()">
-                            🔄 Reset Animasi
+                        <button class="btn-tiktok btn-tiktok-outline" onclick="triggerEmojiBurst()">
+                            🎉 Test Efek
+                        </button>
+                        <button class="btn-tiktok btn-tiktok-outline" onclick="clearAll()">
+                            🗑️ Reset
                         </button>
                     </div>
                 </div>
@@ -613,23 +919,22 @@
         </div>
     </div>
 
+    <!-- Fullscreen Counter Display (TikTok Style) -->
+    <div class="counter-fullscreen" id="fullscreenCounter">
+        <!-- Floating background emojis -->
+        <div id="fsBgEmojis"></div>
+        
+        <div class="fullscreen-stars" id="fsEmoji">🤩</div>
+        <div class="fullscreen-count" id="fsCount">0</div>
+        <div class="fullscreen-label">PENILAIAN MASUK</div>
+        <div class="fullscreen-avg" id="fsAvg">Rata-rata: 0.0</div>
+        <button class="fullscreen-exit" onclick="exitFullscreenCounter()">✕ Tutup</button>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast">
         <span>✨</span>
         <span id="toastMsg">Penilaian baru masuk!</span>
-    </div>
-
-    <!-- Hidden element for counter display toggle -->
-    <div id="counterDisplayOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-dark); z-index:3000; display:flex; align-items:center; justify-content:center; flex-direction:column;">
-        <div class="counter-card" style="margin:0; max-width:600px;">
-            <div class="counter-label">
-                <svg viewBox="0 0 24 24" style="width:28px;height:28px;"><path d="M10 15.5v-7c0-.41.47-.65.8-.4l4.67 3.5c.27.2.27.6 0 .8l-4.67 3.5c-.33.25-.8.01-.8-.4z"/></svg>
-                <span style="font-size:1.3rem;">Total Penilaian</span>
-            </div>
-            <div class="counter-value" id="displayCounter" style="font-size:5rem;">0</div>
-            <div class="counter-sublabel" style="font-size:1.2rem;">vote masuk real-time</div>
-        </div>
-        <button class="btn btn-outline" onclick="exitCounterDisplay()" style="margin-top:24px; padding:12px 32px;">← Kembali</button>
     </div>
 
     <script type="module">
@@ -653,8 +958,7 @@
         const reviewsRef = ref(db, 'reviews');
 
         // ============ CONFIG ============
-        const ADMIN_PASSWORD = "specific"; // Password sesuai request
-        const COUNTER_ANIMATION_SPEED = 8; // Higher = faster animation
+        const ADMIN_PASSWORD = "specific"; // UBAH DARI "spescific" KE "specific"
 
         // ============ UTILS ============
         const escape = str => str ? String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m]) : '';
@@ -667,9 +971,17 @@
             4: {text: '😊 Bagus — Presentasi yang menarik!', cls: 'great'},
             5: {text: '🤩 Luar Biasa — Sangat mengesankan!', cls: 'excellent'}
         };
+        // UBAH SEMUA EMOJI MENGGUNAKAN FACE EMOJI
+        const ratingEmojis = {
+            1: '😞',  // Very bad
+            2: '😐',  // Bad
+            3: '🙂',  // Average
+            4: '😊',  // Good
+            5: '🤩'   // Excellent
+        };
 
         // ============ DOM ELEMENTS ============
-        const navTabs = document.querySelectorAll('.nav-tab');
+        const navTabs = document.querySelectorAll('.nav-tab[data-view]');
         const views = {
             audience: document.getElementById('audienceView'),
             admin: document.getElementById('adminView')
@@ -691,8 +1003,6 @@
         let chartInstance = null;
         let currentReviews = [];
         let lastVoteCount = 0;
-        let lastVoteTime = Date.now();
-        let counterDisplayActive = false;
 
         // ============ PARTICLES ============
         function initParticles() {
@@ -709,26 +1019,20 @@
         }
 
         // ============ NAVIGATION ============
-        // Main view tabs
-        document.querySelectorAll('.nav-tab[data-view]').forEach(tab => {
+        navTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const view = tab.dataset.view;
-                
                 if (view === 'admin') {
-                    // Show password modal first
                     openPasswordModal();
                     return;
                 }
-                
-                // Switch to audience view
-                document.querySelectorAll('.nav-tab[data-view]').forEach(t => t.classList.remove('active'));
+                navTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 Object.values(views).forEach(v => v.classList.remove('active'));
                 views.audience.classList.add('active');
             });
         });
 
-        // Admin sub-tabs
         adminTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const tabName = tab.dataset.adminTab;
@@ -736,11 +1040,6 @@
                 tab.classList.add('active');
                 Object.values(adminViews).forEach(v => v.style.display = 'none');
                 adminViews[tabName].style.display = 'block';
-                
-                // Trigger animations
-                if (tabName === 'counter') {
-                    animateCounterValues();
-                }
             });
         });
 
@@ -758,42 +1057,23 @@
         }
 
         function checkPassword() {
-            const input = passwordInput.value;
-            if (input === ADMIN_PASSWORD) {
-                // Success - switch to admin view
+            if (passwordInput.value === ADMIN_PASSWORD) {
                 closePasswordModal();
-                document.querySelectorAll('.nav-tab[data-view]').forEach(t => t.classList.remove('active'));
+                navTabs.forEach(t => t.classList.remove('active'));
                 document.querySelector('.nav-tab[data-view="admin"]').classList.add('active');
                 Object.values(views).forEach(v => v.classList.remove('active'));
                 views.admin.classList.add('active');
-                
-                // Trigger card animations
-                document.querySelectorAll('#adminView .card').forEach((card, i) => {
-                    card.classList.remove('visible');
-                    setTimeout(() => card.classList.add('visible'), i * 100);
-                });
-                
                 showToast('🔓 Akses admin dibuka');
             } else {
-                // Error
                 passwordError.classList.add('show');
                 passwordInput.classList.add('error');
                 passwordInput.select();
-                
-                // Remove error animation class after it completes
                 setTimeout(() => passwordInput.classList.remove('error'), 400);
             }
         }
 
-        // Enter key in password field
-        passwordInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkPassword();
-        });
-
-        // Close modal on backdrop click
-        passwordModal.addEventListener('click', (e) => {
-            if (e.target === passwordModal) closePasswordModal();
-        });
+        passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
+        passwordModal.addEventListener('click', (e) => { if (e.target === passwordModal) closePasswordModal(); });
 
         // ============ STAR RATING LOGIC ============
         document.querySelectorAll('input[name="rating"]').forEach(radio => {
@@ -823,12 +1103,9 @@
                     date: new Date().toISOString()
                 });
 
-                // Show thank you
                 document.querySelector('#audienceView .card').style.display = 'none';
                 thankYou.style.display = 'block';
-                thankYou.classList.add('visible');
 
-                // Reset form after delay
                 setTimeout(() => {
                     selected.checked = false;
                     document.getElementById('nameInput').value = '';
@@ -839,7 +1116,6 @@
                     document.querySelector('#audienceView .card').style.display = 'block';
                     thankYou.style.display = 'none';
                 }, 3000);
-
             } catch (err) {
                 console.error('Submit error:', err);
                 showToast('❌ Gagal mengirim. Coba lagi.', 'error');
@@ -851,18 +1127,10 @@
             const data = snapshot.val();
             const reviews = data ? Object.values(data).sort((a,b) => new Date(a.date) - new Date(b.date)) : [];
             
-            // Detect new votes for toast & counter animation
             if (reviews.length > lastVoteCount && reviews.length > 0) {
                 showToast('✨ Penilaian baru masuk!');
-                
-                // Update rate calculation
-                const now = Date.now();
-                const timeDiff = (now - lastVoteTime) / 1000; // seconds
-                if (timeDiff > 0 && timeDiff < 10) {
-                    const rate = (1 / timeDiff).toFixed(1);
-                    document.getElementById('counterRate').textContent = `${rate}/s`;
-                }
-                lastVoteTime = now;
+                spawnStarRain();
+                triggerMainEmojiPop(reviews[reviews.length-1].rating);
             }
             lastVoteCount = reviews.length;
             currentReviews = reviews;
@@ -870,7 +1138,7 @@
             updateStats(reviews);
             updateChart(reviews);
             renderFeed(reviews);
-            updateCounterDisplay(reviews);
+            updateTikTokCounter(reviews);
         });
 
         // ============ RENDER FUNCTIONS ============
@@ -891,7 +1159,7 @@
             const top = counts.indexOf(Math.max(...counts.slice(1)));
             
             document.getElementById('avgRating').textContent = avg;
-            document.getElementById('topRating').textContent = `${top}★`;
+            document.getElementById('topRating').textContent = `${ratingEmojis[top]} ${top}★`;
             document.getElementById('latestTime').textContent = formatTime(reviews[reviews.length-1].date);
         }
 
@@ -903,59 +1171,21 @@
                 labels: ['1★','2★','3★','4★','5★'],
                 datasets: [{
                     data: counts.slice(1),
-                    backgroundColor: [
-                        'rgba(239,68,68,0.85)',
-                        'rgba(251,146,60,0.85)',
-                        'rgba(250,204,21,0.85)',
-                        'rgba(96,165,250,0.85)',
-                        'rgba(74,222,128,0.85)'
-                    ],
-                    borderColor: [
-                        'rgba(239,68,68,1)',
-                        'rgba(251,146,60,1)',
-                        'rgba(250,204,21,1)',
-                        'rgba(96,165,250,1)',
-                        'rgba(74,222,128,1)'
-                    ],
-                    borderWidth: 2,
-                    borderRadius: 10,
-                    borderSkipped: false,
-                    barPercentage: 0.7
+                    backgroundColor: ['rgba(239,68,68,0.85)','rgba(251,146,60,0.85)','rgba(250,204,21,0.85)','rgba(96,165,250,0.85)','rgba(74,222,128,0.85)'],
+                    borderRadius: 10, borderSkipped: false, barPercentage: 0.7
                 }]
             };
 
             const ctx = document.getElementById('ratingChart').getContext('2d');
-            
             if (!chartInstance) {
                 chartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: data,
+                    type: 'bar', data,
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { 
-                            legend: { display: false },
-                            tooltip: { 
-                                enabled: true,
-                                backgroundColor: 'rgba(15,35,65,0.95)',
-                                titleColor: '#fff',
-                                bodyColor: '#cbd5e1',
-                                borderColor: 'rgba(100,180,255,0.3)',
-                                borderWidth: 1,
-                                padding: 12,
-                                displayColors: true
-                            }
-                        },
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: {display:false} },
                         scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { color: '#94a3b8', stepSize: 1 },
-                                grid: { color: 'rgba(100,180,255,0.1)' }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { color: '#fff', font: { size: 13, weight: '600' } }
-                            }
+                            y: { beginAtZero:true, ticks:{stepSize:1, color:'#94a3b8'}, grid:{color:'rgba(100,180,255,0.1)'} },
+                            x: { grid:{display:false}, ticks:{color:'#fff', font:{size:13, weight:'600'}} }
                         },
                         animation: { duration: 400 }
                     }
@@ -971,12 +1201,11 @@
                 feedList.innerHTML = '<div class="empty-state">Menunggu penilaian pertama...</div>';
                 return;
             }
-
             feedList.innerHTML = reviews.slice().reverse().map(r => `
                 <div class="feed-item">
                     <div class="feed-header">
                         <span class="feed-name">${r.name}</span>
-                        <span class="feed-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                        <span class="feed-stars">${ratingEmojis[r.rating]} ${'★'.repeat(r.rating)}</span>
                     </div>
                     ${r.feedback ? `<div class="feed-msg">"${r.feedback}"</div>` : ''}
                     <div class="feed-time">🕐 ${formatTime(r.date)}</div>
@@ -984,93 +1213,154 @@
             `).join('');
         }
 
-        // ============ YOUTUBE-STYLE COUNTER ============
-        function animateNumber(element, start, end, duration = 1000) {
-            const range = end - start;
-            const increment = range / (duration / 16); // ~60fps
-            let current = start;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
-                    element.textContent = end.toLocaleString('id-ID');
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current).toLocaleString('id-ID');
-                }
-            }, 16);
-        }
-
-        function updateCounterDisplay(reviews) {
+        // ============ TIKTOK STYLE COUNTER ============
+        function updateTikTokCounter(reviews) {
             const total = reviews.length;
             const avg = total > 0 ? (reviews.reduce((s,r) => s + r.rating, 0) / total).toFixed(1) : '0.0';
-            const fiveStars = reviews.filter(r => r.rating === 5).length;
-            const withFeedback = reviews.filter(r => r.feedback).length;
-            const meterPercent = (parseFloat(avg) / 5) * 100;
+            const counts = [0,0,0,0,0,0];
+            reviews.forEach(r => counts[r.rating]++);
+            const maxCount = Math.max(...counts.slice(1), 1);
 
-            // Animate main counter (YouTube style)
-            const liveCounter = document.getElementById('liveCounter');
-            const displayCounter = document.getElementById('displayCounter');
-            const currentVal = parseInt(liveCounter.textContent.replace(/[^0-9]/g, '')) || 0;
-            
-            if (total !== currentVal) {
-                animateNumber(liveCounter, currentVal, total, 800);
-                if (counterDisplayActive) {
-                    animateNumber(displayCounter, currentVal, total, 800);
-                }
+            // Main emoji based on most popular rating
+            const topRating = counts.indexOf(Math.max(...counts.slice(1)));
+            const mainEmoji = document.getElementById('mainEmoji');
+            if (total > 0) {
+                mainEmoji.textContent = ratingEmojis[topRating];
             }
 
-            // Update other counters
-            document.getElementById('counterAvg').textContent = avg;
-            document.getElementById('counter5star').textContent = fiveStars;
-            document.getElementById('counterFeedback').textContent = withFeedback;
-            
+            // Update total counter with animation
+            animateValue('totalCounter', parseInt(document.getElementById('totalCounter').textContent) || 0, total, 600);
+
+            // Update bars
+            for (let i = 5; i >= 1; i--) {
+                const pct = (counts[i] / maxCount) * 100;
+                document.getElementById(`bar${i}`).style.width = `${pct}%`;
+                document.getElementById(`count${i}`).textContent = counts[i];
+            }
+
+            // Update voter chips
+            renderVoterChips(reviews);
+
             // Update meter
-            document.getElementById('meterFill').style.width = `${meterPercent}%`;
+            const meterPct = (parseFloat(avg) / 5) * 100;
+            document.getElementById('meterFill').style.width = `${meterPct}%`;
             document.getElementById('meterValue').textContent = `${avg}/5.0`;
-        }
 
-        function animateCounterValues() {
-            // Trigger entrance animations for counter tab
-            document.querySelectorAll('.counter-card, .counter-mini, .meter-container').forEach((el, i) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, i * 100);
-            });
-        }
-
-        function resetCounterAnim() {
-            // Reset and re-animate
-            document.getElementById('liveCounter').textContent = '0';
-            document.getElementById('displayCounter').textContent = '0';
-            document.getElementById('meterFill').style.width = '0%';
-            updateCounterDisplay(currentReviews);
-            animateCounterValues();
-            showToast('🔄 Animasi direset');
-        }
-
-        function toggleCounterDisplay() {
-            const overlay = document.getElementById('counterDisplayOverlay');
-            counterDisplayActive = !counterDisplayActive;
-            
-            if (counterDisplayActive) {
-                overlay.style.display = 'flex';
-                document.getElementById('displayCounter').textContent = document.getElementById('liveCounter').textContent;
-                showToast('🎬 Mode tampilan counter aktif');
-            } else {
-                overlay.style.display = 'none';
-                showToast('← Kembali ke dashboard');
+            // Update fullscreen if active
+            if (document.getElementById('fullscreenCounter').classList.contains('active')) {
+                document.getElementById('fsEmoji').textContent = ratingEmojis[topRating];
+                animateValue('fsCount', parseInt(document.getElementById('fsCount').textContent) || 0, total, 600);
+                document.getElementById('fsAvg').textContent = `Rata-rata: ${avg} ${'★'.repeat(Math.round(parseFloat(avg)))}`;
             }
         }
 
-        function exitCounterDisplay() {
-            counterDisplayActive = false;
-            document.getElementById('counterDisplayOverlay').style.display = 'none';
+        function animateValue(elementId, start, end, duration) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const range = end - start;
+            const startTime = performance.now();
+            
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                const current = Math.floor(start + range * eased);
+                el.textContent = current;
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
         }
+
+        function renderVoterChips(reviews) {
+            const container = document.getElementById('voterChips');
+            if (reviews.length === 0) {
+                container.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Belum ada penilaian</span>';
+                return;
+            }
+
+            const recent = reviews.slice(-12).reverse(); // Last 12 voters
+            container.innerHTML = recent.map(r => {
+                const stars = '★'.repeat(r.rating);
+                const emoji = ratingEmojis[r.rating];
+                return `<span class="voter-chip">${emoji} ${escape(r.name)} <span class="chip-stars">${stars}</span></span>`;
+            }).join('');
+        }
+
+        // Star rain effect
+        function spawnStarRain() {
+            const container = document.getElementById('starRain');
+            const emojis = ['⭐','🤩','😊','✨','💫','','🎊','','🙂',''];
+            
+            for (let i = 0; i < 15; i++) {
+                const star = document.createElement('div');
+                star.classList.add('floating-star');
+                star.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                star.style.left = (10 + Math.random() * 80) + '%';
+                star.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                star.style.animationDelay = (Math.random() * 0.5) + 's';
+                container.appendChild(star);
+                
+                setTimeout(() => star.remove(), 5000);
+            }
+        }
+
+        // Main emoji pop animation
+        function triggerMainEmojiPop(rating) {
+            const emoji = document.getElementById('mainEmoji');
+            emoji.classList.remove('pop');
+            void emoji.offsetWidth; // trigger reflow
+            emoji.classList.add('pop');
+            
+            // Spawn extra stars
+            const container = document.getElementById('starRain');
+            for (let i = 0; i < 8; i++) {
+                const star = document.createElement('div');
+                star.classList.add('floating-star');
+                star.textContent = ratingEmojis[rating] || '😊';
+                star.style.left = (30 + Math.random() * 40) + '%';
+                star.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+                star.style.animationDelay = (Math.random() * 0.3) + 's';
+                container.appendChild(star);
+                setTimeout(() => star.remove(), 4000);
+            }
+        }
+
+        // Manual test burst
+        window.triggerEmojiBurst = () => {
+            const randomRating = Math.ceil(Math.random() * 5);
+            triggerMainEmojiPop(randomRating);
+            showToast(`🎉 Test: Rating ${randomRating} ${ratingEmojis[randomRating]} masuk!`);
+        };
+
+        // ============ FULLSCREEN COUNTER ============
+        window.toggleFullscreenCounter = () => {
+            const overlay = document.getElementById('fullscreenCounter');
+            overlay.classList.toggle('active');
+            
+            if (overlay.classList.contains('active')) {
+                // Generate floating background emojis
+                const bgContainer = document.getElementById('fsBgEmojis');
+                bgContainer.innerHTML = '';
+                const bgEmojis = ['🤩','😊','🙂','😐','','✨','💫','','🎊','','💖','🔥','🏆'];
+                for (let i = 0; i < 20; i++) {
+                    const emoji = document.createElement('div');
+                    emoji.classList.add('fullscreen-floating-emoji');
+                    emoji.textContent = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
+                    emoji.style.left = Math.random() * 90 + '%';
+                    emoji.style.animationDelay = (Math.random() * 4) + 's';
+                    emoji.style.animationDuration = (3 + Math.random() * 4) + 's';
+                    bgContainer.appendChild(emoji);
+                }
+                
+                // Update with current data
+                updateTikTokCounter(currentReviews);
+            }
+        };
+
+        window.exitFullscreenCounter = () => {
+            document.getElementById('fullscreenCounter').classList.remove('active');
+        };
 
         // ============ TOAST ============
         function showToast(msg, type = 'success') {
@@ -1083,61 +1373,42 @@
         // ============ ACTIONS ============
         window.exportCSV = () => {
             if (currentReviews.length === 0) return showToast('Belum ada data', 'error');
-            
             let csv = 'Nama,Rating,Saran,Waktu\n';
             currentReviews.forEach(r => {
                 const time = new Date(r.date).toLocaleString('id-ID');
-                const fb = `"${(r.feedback || '').replace(/"/g, '""')}"`;
-                csv += `"${r.name}",${r.rating},${fb},"${time}"\n`;
+                csv += `"${r.name}",${r.rating},"${(r.feedback||'').replace(/"/g,'""')}","${time}"\n`;
             });
-            
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
+            const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(blob);
             a.download = `rating-${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
-            URL.revokeObjectURL(url);
-            showToast('📥 Data berhasil diexport!');
+            showToast('📥 Export berhasil!');
         };
 
         window.clearAll = () => {
-            if (confirm('⚠️ Hapus SEMUA data rating? Tindakan ini tidak bisa dibatalkan!')) {
-                remove(reviewsRef)
-                    .then(() => {
-                        showToast('🗑️ Data berhasil direset');
-                        document.getElementById('counterRate').textContent = '0/s';
-                    })
-                    .catch(err => showToast('❌ Gagal reset: ' + err.message, 'error'));
+            if (confirm('⚠️ Hapus SEMUA data? Tidak bisa dibatalkan!')) {
+                remove(reviewsRef).then(() => showToast('🗑️ Data direset'));
             }
         };
 
         window.toggleFullscreen = () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    showToast('Fullscreen tidak didukung', 'error');
-                });
-            } else {
-                document.exitFullscreen();
-            }
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
         };
 
         // ============ INIT ============
         initParticles();
         
-        // Trigger initial card animation
         setTimeout(() => {
             document.querySelectorAll('#audienceView .card').forEach((card, i) => {
                 setTimeout(() => card.classList.add('visible'), i * 150);
             });
         }, 300);
 
-        // Expose functions for global access
+        // Expose functions
         window.checkPassword = checkPassword;
         window.closePasswordModal = closePasswordModal;
-        window.toggleCounterDisplay = toggleCounterDisplay;
-        window.exitCounterDisplay = exitCounterDisplay;
-        window.resetCounterAnim = resetCounterAnim;
     </script>
 </body>
 </html>
